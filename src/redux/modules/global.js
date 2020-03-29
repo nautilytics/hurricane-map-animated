@@ -1,11 +1,11 @@
 import {initialState} from '../state/global';
 import {getData, getTopology, getWindSpeed} from '../api';
 import {IS_CLICKED} from '../../constant';
-import {getMaxDate, getMinDate, xAccessor} from '../../utils';
+import {dateAccessor, xAccessor} from '../../utils';
 import {nest} from 'd3-collection';
 import {scaleQuantize} from 'd3-scale';
 import {schemeRdYlGn} from 'd3-scale-chromatic';
-import {max} from 'd3-array';
+import {ascending, max} from 'd3-array';
 
 // Actions
 const TOGGLE_LOADING_ICON = 'TOGGLE_LOADING_ICON';
@@ -33,25 +33,20 @@ const handleTooltip = (state, item) => {
 };
 
 const handleCountyLevelData = (state, data) => {
-    const minDate = getMinDate(data);
-    const maxDate = getMaxDate(data);
-    const numberOfPeriods = maxDate.diff(minDate, 'days');
     return {
         ...state,
         data,
         nestedData: nest()
-            .key(d => d.properties.startDate.format())
+            .key(dateAccessor)
             .entries(data),
-        numberOfPeriods,
         colorScale: scaleQuantize()
             .range(schemeRdYlGn[7].reverse())
-            .domain([0, max(data, xAccessor)]),
-        currentIndex: numberOfPeriods,
+            .domain([0, max(data, xAccessor)])
     };
 };
 
 const handleCurrentIndex = state => {
-    if (state.currentIndex < state.numberOfPeriods) {
+    if (state.currentIndex < state.timePeriods.length) {
         return {
             ...state,
             currentIndex: state.currentIndex + 1,
@@ -77,7 +72,9 @@ export default function reducer(state = initialState, action) {
         case UPDATE_WIND_SPEED:
             return {
                 ...state,
-                windSpeed: action.windSpeed
+                timePeriods: Array.from(new Set(action.windSpeed.map(dateAccessor))).sort(ascending),
+                windSpeed: action.windSpeed,
+                currentIndex: 0
             };
         case UPDATE_TOOLTIP:
             return {

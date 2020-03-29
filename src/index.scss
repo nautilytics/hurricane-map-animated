@@ -50,15 +50,15 @@
         }
 
         &.wind-speed {
-          fill: none;
-          stroke: red;
+          stroke: none;
+          fill-opacity: .35;
           pointer-events: none;
         }
       }
     }
 
     .citation {
-      margin-top: 5rem;
+      margin-top: 10rem;
     }
 
     .threshold-legend {

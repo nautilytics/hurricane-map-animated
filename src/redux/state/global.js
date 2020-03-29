@@ -7,6 +7,6 @@ export const initialState = {
   showError: false,
   tooltip: null,
   currentIndex: 0,
-  numberOfPeriods: 0,
+  timePeriods: [],
   colorScale: null,
 };
