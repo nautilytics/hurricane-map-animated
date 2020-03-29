@@ -1,2 +1,5 @@
-# hurricane-map-animated
-An animated SVG map of hurricanes
+#### A look at hurricanes mapped over time
+
+##### Instructions
+
+- Install [Postgres](https://postgresapp.com/)

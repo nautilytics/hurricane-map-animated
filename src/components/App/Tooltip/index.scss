@@ -1,0 +1,61 @@
+.tooltip {
+  text-align: center;
+  z-index: 1000;
+  position: absolute;
+  display: block;
+
+  .tooltip-container {
+    position: absolute;
+    bottom: 0;
+    width: 150px;
+    line-height: 16px;
+    border-radius: 4px;
+    background: #fff;
+    color: black;
+    border: solid 1px lightgray;
+    box-shadow: 0 4px 8px 0 rgba(61, 65, 72, 0.15);
+    -moz-box-shadow: 0 4px 8px 0 rgba(61, 65, 72, 0.15);
+    text-align: center;
+  }
+
+  .tail {
+    position: absolute;
+    bottom: -8px;
+    left: 50px;
+    width: 40px;
+    height: 8px;
+    background: url('../../../assets/images/tail_white.png') 50% 0;
+  }
+
+  .contents {
+    display: flex;
+    flex-direction: row;
+    padding: 0 1rem;
+    max-width: 71rem;
+    margin-right: auto;
+    margin-left: auto;
+
+    .inner-contents {
+      box-shadow: 0 1px 0 0 #e4e5e7;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      //text-align: left;
+
+      .column {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        color: #616571;
+        font-size: 0.875rem;
+
+        .title {
+          margin-bottom: 0.25rem;
+        }
+      }
+    }
+  }
+}

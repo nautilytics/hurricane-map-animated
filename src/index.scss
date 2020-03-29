@@ -1,0 +1,85 @@
+.main {
+  text-align: center;
+  width: calc(100vw * 0.9);
+  height: calc(100vh * 0.9);
+  padding: 1.5rem;
+
+  .button {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    cursor: pointer;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.5rem;
+
+    &.space-between {
+      justify-content: space-between;
+    }
+  }
+
+  .maps {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+
+    .map {
+      width: 975px;
+      height: 610px;
+
+      path {
+        stroke: gray;
+        stroke-width: 0.5px;
+
+        &.no-data {
+          fill: #fdfdfd !important;
+        }
+
+        &.state {
+          fill: none;
+          stroke: black;
+          stroke-width: 1px;
+        }
+
+        &.active {
+          stroke: black;
+          stroke-width: 1px;
+        }
+
+        &.wind-speed {
+          fill: none;
+          stroke: red;
+          pointer-events: none;
+        }
+      }
+    }
+
+    .citation {
+      margin-top: 5rem;
+    }
+
+    .threshold-legend {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      position: fixed;
+      bottom: 250px;
+      right: 150px;
+
+      .square {
+        width: 16px;
+        height: 16px;
+        margin-right: 0.75rem;
+        border: 1px transparent solid;
+
+        &.no-data {
+          border: 1px gray solid;
+          background-color: lightgray;
+        }
+      }
+    }
+  }
+}
