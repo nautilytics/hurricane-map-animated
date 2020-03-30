@@ -40,9 +40,8 @@ const Brush = () => {
         value={value}
         onChange={updateRange}
         onChangeCommitted={updateCurrentIndexOnDragEnd}
-        valueLabelDisplay="auto"
-        valueLabelFormat={value => ''}
-        getAriaValueText={() => ''}
+        valueLabelDisplay="on"
+        valueLabelFormat={value => moment(value).format(DISPLAY_DATE_FORMAT)}
         aria-labelledby="discrete-slider-restrict"
         min={minValue.valueOf()}
         max={maxValue.valueOf()}

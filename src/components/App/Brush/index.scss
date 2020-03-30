@@ -33,6 +33,14 @@
       margin-left: -10px;
     }
 
+    .MuiSlider-markLabel {
+      visibility: hidden;
+    }
+
+    .MuiSlider-mark {
+      visibility: hidden;
+    }
+
     .MuiSlider-valueLabel {
       top: 30px;
 
