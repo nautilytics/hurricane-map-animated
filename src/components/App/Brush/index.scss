@@ -1,5 +1,5 @@
 #brush {
-  width: 50%;
+  width: 60%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -7,6 +7,10 @@
   .label {
     font-size: 14px;
     width: 50px;
+  }
+
+  .MuiSvgIcon-root {
+    cursor: pointer;
   }
 
   .MuiSlider-root {

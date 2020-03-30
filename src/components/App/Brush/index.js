@@ -2,16 +2,22 @@ import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Slider } from '@material-ui/core';
 import moment from 'moment';
-import { DATE_TIME_FORMAT, DISPLAY_DATE_FORMAT } from '../../../constant';
-import { UPDATE_CURRENT_INDEX } from '../../../redux/modules/global';
+import { DATE_TIME_FORMAT, DISPLAY_DATE_FORMAT, DURATION } from '../../../constant';
+import { TIMER_TICK, UPDATE_CURRENT_INDEX } from '../../../redux/modules/global';
+import PlayCircleOutline from '@material-ui/icons/PlayCircleOutline';
+import PauseCircleOutline from '@material-ui/icons/PauseCircleOutline';
 import './index.scss';
 
 const Brush = () => {
   const dispatch = useDispatch();
   const timePeriods = useSelector(state => state.global.timePeriods);
-  const [value, setValue] = useState(moment(timePeriods[timePeriods.length - 1], DATE_TIME_FORMAT).valueOf());
+  const currentIndex = useSelector(state => state.global.currentIndex);
+  const [value, setValue] = useState(moment(timePeriods[currentIndex], DATE_TIME_FORMAT).valueOf());
+  const tickTimer = useCallback(() => dispatch({ type: TIMER_TICK }), [dispatch]);
   const minValue = moment(timePeriods[0], DATE_TIME_FORMAT);
   const maxValue = moment(timePeriods[timePeriods.length - 1], DATE_TIME_FORMAT);
+  const [timer, setTimer] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const updateRange = (evt, newValue) => setValue(newValue);
 
@@ -33,15 +39,30 @@ const Brush = () => {
     [dispatch],
   );
 
+  const start = () => {
+    setTimer(
+      setInterval(() => {
+        tickTimer();
+      }, DURATION),
+    );
+    setIsPlaying(true);
+    tickTimer();
+  };
+  const stop = () => {
+    setIsPlaying(false);
+    setTimer(clearInterval(timer));
+  };
+
   return (
     <div id="brush">
+      {isPlaying ? <PauseCircleOutline fontSize={'large'} onClick={stop} /> : <PlayCircleOutline fontSize={'large'} onClick={start} />}
       <div className="label">{minValue.format('MMM DD')}</div>
       <Slider
-        value={value}
+        value={moment(timePeriods[currentIndex], DATE_TIME_FORMAT).valueOf()}
         onChange={updateRange}
         onChangeCommitted={updateCurrentIndexOnDragEnd}
         valueLabelDisplay="on"
-        valueLabelFormat={value => moment(value).format(DISPLAY_DATE_FORMAT)}
+        valueLabelFormat={x => moment(x).format(DISPLAY_DATE_FORMAT)}
         aria-labelledby="discrete-slider-restrict"
         min={minValue.valueOf()}
         max={maxValue.valueOf()}
