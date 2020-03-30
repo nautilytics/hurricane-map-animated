@@ -17,10 +17,10 @@ const Axes = ({ xScale, colorScale, xScaleTickFormat, height }) => {
   const renderXAxis = () => {
     const xAxis = select(xAxisRef.current);
 
-    // Ensure both the starting and ending tick values are included in the legend
+    // Ensure all ending tick values are included in the legend
     const tickValues = colorScale
       .range()
-      .map(d => colorScale.invertExtent(d)[0])
+      .map(d => colorScale.invertExtent(d)[1])
       .concat(colorScale.invertExtent(colorScale.range()[colorScale.range().length - 1])[1]);
 
     xAxis.call(
@@ -29,7 +29,8 @@ const Axes = ({ xScale, colorScale, xScaleTickFormat, height }) => {
         .tickValues(tickValues),
     );
 
-    xAxis.select('.domain').remove();
+    xAxis.call(g => g.select('.domain').remove());
+    xAxis.call(g => g.selectAll('.tick line').remove());
   };
 
   return (

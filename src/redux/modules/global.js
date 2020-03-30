@@ -1,11 +1,11 @@
-import {initialState} from '../state/global';
-import {getData, getTopology, getWindSpeed} from '../api';
-import {IS_CLICKED} from '../../constant';
-import {dateAccessor, xAccessor} from '../../utils';
-import {nest} from 'd3-collection';
-import {scaleQuantize} from 'd3-scale';
-import {schemeRdYlGn} from 'd3-scale-chromatic';
-import {ascending, max} from 'd3-array';
+import { initialState } from '../state/global';
+import { getData, getTopology, getWindSpeed } from '../api';
+import { IS_CLICKED } from '../../constant';
+import { dateAccessor } from '../../utils';
+import { nest } from 'd3-collection';
+import { scaleQuantile } from 'd3-scale';
+import { schemeYlOrRd } from 'd3-scale-chromatic';
+import { ascending } from 'd3-array';
 
 // Actions
 const TOGGLE_LOADING_ICON = 'TOGGLE_LOADING_ICON';
@@ -17,119 +17,120 @@ const SHOW_ERROR = 'SHOW_ERROR';
 const UPDATE_WIND_SPEED = 'UPDATE_WIND_SPEED';
 
 const handleTooltip = (state, item) => {
-    if (state.tooltip && state.tooltip[IS_CLICKED]) {
-        if (item && item[IS_CLICKED]) {
-            if (item.id === state.tooltip.id) {
-                return null;
-            } else {
-                return item;
-            }
-        } else {
-            return state.tooltip;
-        }
-    } else {
+  if (state.tooltip && state.tooltip[IS_CLICKED]) {
+    if (item && item[IS_CLICKED]) {
+      if (item.id === state.tooltip.id) {
+        return null;
+      } else {
         return item;
+      }
+    } else {
+      return state.tooltip;
     }
+  } else {
+    return item;
+  }
 };
 
 const handleCountyLevelData = (state, data) => {
-    return {
-        ...state,
-        data,
-        nestedData: nest()
-            .key(dateAccessor)
-            .entries(data),
-        colorScale: scaleQuantize()
-            .range(schemeRdYlGn[7].reverse())
-            .domain([0, max(data, xAccessor)])
-    };
+  return {
+    ...state,
+    data,
+    nestedData: nest()
+      .key(dateAccessor)
+      .entries(data),
+    colorScale: scaleQuantile()
+      .range(schemeYlOrRd[3])
+      .domain([0, 34, 50, 64]),
+  };
 };
 
 const handleCurrentIndex = state => {
-    if (state.currentIndex < state.timePeriods.length) {
-        return {
-            ...state,
-            currentIndex: state.currentIndex + 1,
-        };
-    } else {
-        return {
-            ...state,
-            currentIndex: 0,
-        };
-    }
+  if (state.currentIndex < state.timePeriods.length - 1) {
+    return {
+      ...state,
+      currentIndex: state.currentIndex + 1,
+    };
+  } else {
+    return {
+      ...state,
+      currentIndex: 0,
+    };
+  }
 };
 
 // Reducer
 export default function reducer(state = initialState, action) {
-    switch (action.type) {
-        case UPDATE_DATA:
-            return handleCountyLevelData(state, action.data);
-        case UPDATE_TOPOLOGY:
-            return {
-                ...state,
-                topology: action.topology,
-            };
-        case UPDATE_WIND_SPEED:
-            return {
-                ...state,
-                timePeriods: Array.from(new Set(action.windSpeed.map(dateAccessor))).sort(ascending),
-                windSpeed: action.windSpeed,
-                currentIndex: 0
-            };
-        case UPDATE_TOOLTIP:
-            return {
-                ...state,
-                tooltip: handleTooltip(state, action.item),
-            };
-        case TIMER_TICK:
-            return handleCurrentIndex(state);
-        case SHOW_ERROR:
-            return {
-                ...state,
-                showError: true,
-            };
-        case TOGGLE_LOADING_ICON:
-            return {
-                ...state,
-                showError: false,
-                isLoading: action.x,
-            };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case UPDATE_DATA:
+      return handleCountyLevelData(state, action.data);
+    case UPDATE_TOPOLOGY:
+      return {
+        ...state,
+        topology: action.topology,
+      };
+    case UPDATE_WIND_SPEED:
+      const timePeriods = Array.from(new Set(action.windSpeed.map(dateAccessor))).sort(ascending);
+      return {
+        ...state,
+        timePeriods,
+        windSpeed: action.windSpeed,
+        currentIndex: timePeriods.length - 1,
+      };
+    case UPDATE_TOOLTIP:
+      return {
+        ...state,
+        tooltip: handleTooltip(state, action.item),
+      };
+    case TIMER_TICK:
+      return handleCurrentIndex(state);
+    case SHOW_ERROR:
+      return {
+        ...state,
+        showError: true,
+      };
+    case TOGGLE_LOADING_ICON:
+      return {
+        ...state,
+        showError: false,
+        isLoading: action.x,
+      };
+    default:
+      return state;
+  }
 }
 
 function toggleLoadingIcon(x) {
-    return {
-        type: TOGGLE_LOADING_ICON,
-        x,
-    };
+  return {
+    type: TOGGLE_LOADING_ICON,
+    x,
+  };
 }
 
 export function retrieveData() {
-    return dispatch => {
-        dispatch(toggleLoadingIcon(true));
+  return dispatch => {
+    dispatch(toggleLoadingIcon(true));
 
-        Promise.all([getTopology(), getData(), getWindSpeed()])
-            .then(results => {
-                const [topology, data, windSpeed] = results;
-                dispatch({
-                    type: UPDATE_TOPOLOGY,
-                    topology,
-                });
-                dispatch({
-                    type: UPDATE_DATA,
-                    data,
-                });
-                dispatch({
-                    type: UPDATE_WIND_SPEED,
-                    windSpeed,
-                });
-            })
-            .catch(err => {
-                console.log(err);
-                dispatch({type: SHOW_ERROR});
-            })
-            .finally(() => dispatch(toggleLoadingIcon(false)));
-    };
+    Promise.all([getTopology(), getData(), getWindSpeed()])
+      .then(results => {
+        const [topology, data, windSpeed] = results;
+        dispatch({
+          type: UPDATE_TOPOLOGY,
+          topology,
+        });
+        dispatch({
+          type: UPDATE_DATA,
+          data,
+        });
+        dispatch({
+          type: UPDATE_WIND_SPEED,
+          windSpeed,
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        dispatch({ type: SHOW_ERROR });
+      })
+      .finally(() => dispatch(toggleLoadingIcon(false)));
+  };
 }

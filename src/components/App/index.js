@@ -25,7 +25,11 @@ const App = () => {
   const icon = isPlaying ? faPause : faPlay;
 
   const start = () => {
-    setTimer(setInterval(() => tickTimer(), DURATION));
+    setTimer(
+      setInterval(() => {
+        tickTimer();
+      }, DURATION),
+    );
     setIsPlaying(true);
     tickTimer();
   };
@@ -41,9 +45,7 @@ const App = () => {
         size="lg"
         className={`${isPlaying} ? 'pause' : 'play'} button`}
         icon={icon}
-        onClick={() => {
-          isPlaying ? stop() : start();
-        }}
+        onClick={() => (isPlaying ? stop() : start())}
       />
       {topology && data && windSpeed ? <Maps /> : <Spinner />}
     </div>
