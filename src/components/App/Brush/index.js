@@ -12,14 +12,11 @@ const Brush = () => {
   const dispatch = useDispatch();
   const timePeriods = useSelector(state => state.global.timePeriods);
   const currentIndex = useSelector(state => state.global.currentIndex);
-  const [value, setValue] = useState(moment(timePeriods[currentIndex], DATE_TIME_FORMAT).valueOf());
   const tickTimer = useCallback(() => dispatch({ type: TIMER_TICK }), [dispatch]);
   const minValue = moment(timePeriods[0], DATE_TIME_FORMAT);
   const maxValue = moment(timePeriods[timePeriods.length - 1], DATE_TIME_FORMAT);
   const [timer, setTimer] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  const updateRange = (evt, newValue) => setValue(newValue);
 
   const marks = timePeriods.map(timePeriod => {
     return {
@@ -59,7 +56,6 @@ const Brush = () => {
       <div className="label">{minValue.format('MMM DD')}</div>
       <Slider
         value={moment(timePeriods[currentIndex], DATE_TIME_FORMAT).valueOf()}
-        onChange={updateRange}
         onChangeCommitted={updateCurrentIndexOnDragEnd}
         valueLabelDisplay="on"
         valueLabelFormat={x => moment(x).format(DISPLAY_DATE_FORMAT)}
