@@ -11,6 +11,7 @@ import { ascending } from 'd3-array';
 const TOGGLE_LOADING_ICON = 'TOGGLE_LOADING_ICON';
 export const UPDATE_TOOLTIP = 'UPDATE_TOOLTIP';
 export const TIMER_TICK = 'TIMER_TICK';
+export const UPDATE_CURRENT_INDEX = 'UPDATE_CURRENT_INDEX';
 const UPDATE_DATA = 'UPDATE_DATA';
 const UPDATE_TOPOLOGY = 'UPDATE_TOPOLOGY';
 const SHOW_ERROR = 'SHOW_ERROR';
@@ -84,6 +85,11 @@ export default function reducer(state = initialState, action) {
       };
     case TIMER_TICK:
       return handleCurrentIndex(state);
+    case UPDATE_CURRENT_INDEX:
+      return {
+        ...state,
+        currentIndex: action.value,
+      };
     case SHOW_ERROR:
       return {
         ...state,

@@ -2,11 +2,10 @@ import React, { useEffect, useCallback, useState } from 'react';
 import Spinner from './Spinner';
 import Tooltip from './Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
-import Maps from './Maps';
 import { retrieveData, TIMER_TICK } from '../../redux/modules/global';
 import { DURATION } from '../../constant';
+import Map from './Map';
+import Brush from './Brush';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -21,8 +20,6 @@ const App = () => {
   useEffect(() => {
     getData();
   }, []);
-
-  const icon = isPlaying ? faPause : faPlay;
 
   const start = () => {
     setTimer(
@@ -41,13 +38,23 @@ const App = () => {
   return (
     <div className="main">
       <Tooltip isPlaying={isPlaying} />
-      <FontAwesomeIcon
-        size="lg"
-        className={`${isPlaying} ? 'pause' : 'play'} button`}
-        icon={icon}
-        onClick={() => (isPlaying ? stop() : start())}
-      />
-      {topology && data && windSpeed ? <Maps /> : <Spinner />}
+      <h3>Hurricane Sandy</h3>
+      {topology && data && windSpeed ? (
+        <>
+          <Map />
+          <div className="footer">
+            <p className="citation">
+              Data Source:{' '}
+              <a className="link" href="https://www.nhc.noaa.gov/gis/" target="_blank" rel="noopener noreferrer">
+                NOAA
+              </a>
+            </p>
+            <Brush />
+          </div>
+        </>
+      ) : (
+        <Spinner />
+      )}
     </div>
   );
 };

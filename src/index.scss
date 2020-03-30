@@ -1,15 +1,10 @@
 .main {
-  text-align: center;
+  text-align: left;
   width: calc(100vw * 0.9);
   height: calc(100vh * 0.9);
-  padding: 1.5rem;
-
-  .button {
-    position: absolute;
-    top: 25px;
-    left: 25px;
-    cursor: pointer;
-  }
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
 
   .row {
     display: flex;
@@ -21,65 +16,41 @@
     }
   }
 
-  .maps {
+  .map {
+    width: 975px;
+    height: 610px;
+
+    path {
+      stroke: gray;
+      stroke-width: 0.5px;
+
+      &.no-data {
+        fill: #fdfdfd !important;
+      }
+
+      &.state {
+        fill: none;
+        stroke: black;
+        stroke-width: 1px;
+      }
+
+      &.active {
+        stroke: black;
+        stroke-width: 1px;
+      }
+
+      &.wind-speed {
+        stroke: none;
+        fill-opacity: 0.35;
+        pointer-events: none;
+      }
+    }
+  }
+
+  .footer {
     display: flex;
-    flex-direction: column;
-    align-items: baseline;
-
-    .map {
-      width: 975px;
-      height: 610px;
-
-      path {
-        stroke: gray;
-        stroke-width: 0.5px;
-
-        &.no-data {
-          fill: #fdfdfd !important;
-        }
-
-        &.state {
-          fill: none;
-          stroke: black;
-          stroke-width: 1px;
-        }
-
-        &.active {
-          stroke: black;
-          stroke-width: 1px;
-        }
-
-        &.wind-speed {
-          stroke: none;
-          fill-opacity: .35;
-          pointer-events: none;
-        }
-      }
-    }
-
-    .citation {
-      margin-top: 10rem;
-    }
-
-    .threshold-legend {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      position: fixed;
-      bottom: 250px;
-      right: 150px;
-
-      .square {
-        width: 16px;
-        height: 16px;
-        margin-right: 0.75rem;
-        border: 1px transparent solid;
-
-        &.no-data {
-          border: 1px gray solid;
-          background-color: lightgray;
-        }
-      }
-    }
+    flex-direction: row;
+    justify-content: space-between;
+    width: 975px;
   }
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { dateAccessor, getColor, idAccessor, xAccessor } from '../../../../../utils';
+import { dateAccessor, getColor, idAccessor, xAccessor } from '../../../../utils';
 import moment from 'moment';
-import { DATE_TIME_FORMAT } from '../../../../../constant';
+import { DATE_TIME_FORMAT } from '../../../../constant';
 import { ascending } from 'd3-array';
 
 const WindSpeed = ({ path }) => {
