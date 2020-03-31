@@ -1,6 +1,6 @@
 # Hurricane Analysis of Affected Counties
 
-<img width="1130" alt="Screen Shot 2020-03-30 at 8 32 47 PM" src="https://user-images.githubusercontent.com/1707103/77974811-3bc3cc00-72c6-11ea-8557-9f9fdff8b34e.png">
+![hurricane-sandy-over-time](https://user-images.githubusercontent.com/1707103/77975207-64989100-72c7-11ea-9aee-dedf41a13abc.gif)
 
 ## Introduction
 
