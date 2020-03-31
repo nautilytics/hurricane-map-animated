@@ -24,7 +24,7 @@ const QuantizeLegend = ({ width }) => {
           );
         })}
       <text className="title" x={xScale.range()[0]} y={-6}>
-        Wind Speeds
+        Wind speed in knots
       </text>
       <Axes colorScale={colorScale} xScale={xScale} xTickFormat={NUMBER_FORMAT} />
     </g>
