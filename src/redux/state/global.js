@@ -19,5 +19,12 @@ export const initialState = {
       data: 'hurricane-sandy-affected-counties-over-time',
       [IS_SELECTED]: true,
     },
+    {
+      name: 'Hurricane Katrina',
+      id: 'al182012',
+      windSpeed: 'al122005_radii',
+      data: 'hurricane-katrina-affected-counties-over-time',
+      [IS_SELECTED]: false,
+    },
   ],
 };
