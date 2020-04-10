@@ -16,6 +16,7 @@ const UPDATE_DATA = 'UPDATE_DATA';
 const UPDATE_TOPOLOGY = 'UPDATE_TOPOLOGY';
 const SHOW_ERROR = 'SHOW_ERROR';
 const UPDATE_WIND_SPEED = 'UPDATE_WIND_SPEED';
+const UPDATE_HURRICANE = 'UPDATE_HURRICANE';
 
 const handleTooltip = (state, item) => {
   if (state.tooltip && state.tooltip[IS_CLICKED]) {
@@ -101,6 +102,16 @@ export default function reducer(state = initialState, action) {
         showError: false,
         isLoading: action.x,
       };
+    case UPDATE_HURRICANE:
+      return {
+        ...state,
+        hurricanes: state.hurricanes.map(hurricane => {
+          return {
+            ...hurricane,
+            [IS_SELECTED]: hurricane.id === action.id,
+          };
+        }),
+      };
     default:
       return state;
   }
@@ -110,6 +121,16 @@ function toggleLoadingIcon(x) {
   return {
     type: TOGGLE_LOADING_ICON,
     x,
+  };
+}
+
+export function updateHurricane(id) {
+  return dispatch => {
+    dispatch({
+      type: UPDATE_HURRICANE,
+      id,
+    });
+    dispatch(retrieveData());
   };
 }
 

@@ -5,7 +5,7 @@ import './index.scss';
 
 const MaterialSelect = ({ items, handleChange, label, disabled = false }) => {
   const getSelectedItem = items.find(item => item[IS_SELECTED]).id;
-  const onChange = () => evt => handleChange(evt.target.value);
+  const onChange = evt => handleChange(evt.target.value);
 
   return (
     <div className="select-root">

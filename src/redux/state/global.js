@@ -5,7 +5,7 @@ export const initialState = {
   windSpeed: null,
   nestedData: [],
   topology: null,
-  isLoading: false,
+  isLoading: true,
   showError: false,
   tooltip: null,
   currentIndex: 0,
@@ -21,7 +21,7 @@ export const initialState = {
     },
     {
       name: 'Hurricane Katrina',
-      id: 'al182012',
+      id: 'al122005',
       windSpeed: 'al122005_radii',
       data: 'hurricane-katrina-affected-counties-over-time',
       [IS_SELECTED]: false,
