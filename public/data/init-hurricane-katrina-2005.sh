@@ -1,13 +1,15 @@
 #!/bin/bash
 
 # Go to input directory to retrieve necessary files
+mkdir input
 cd input
 
-# Add Hurricane Sandy Radii data to Postgis w/ GIST index
-curl https://www.nhc.noaa.gov/gis/best_track/al182012_best_track.zip --output al182012_best_track.zip
-unzip al182012_best_track.zip
-shp2pgsql al182012_best_track/al182012_radii.shp public.al182012_radii| psql -d gis_db
-psql -d gis_db -c "CREATE INDEX al182012_radii_geom_gix ON public.al182012_radii USING GIST (geom)"
+# Add Hurricane Katrina Radii data to Postgis w/ GIST index
+curl https://www.nhc.noaa.gov/gis/best_track/al122005_best_track.zip --output al122005_best_track.zip
+mkdir al122005_best_track
+unzip al122005_best_track.zip -d al122005_best_track
+shp2pgsql al122005_best_track/al122005_radii.shp public.al122005_radii| psql -d gis_db
+psql -d gis_db -c "CREATE INDEX al122005_radii_geom_gix ON public.al122005_radii USING GIST (geom)"
 
 # Get affected counties with date and windspeed data as GeoJSON
 psql -d gis_db -c "COPY (
@@ -29,11 +31,11 @@ psql -d gis_db -c "COPY (
                                r.gid AS id,
                                c.geoid AS fips
                     ) As l)) As properties
-            FROM public.tl_2019_us_county as c, public.al182012_radii as r
+            FROM public.tl_2019_us_county as c, public.al122005_radii as r
             WHERE ST_Intersects(c.geom, ST_MakeValid(r.geom))
         ) f
     ) fc
-) TO './output/hurricane-sandy-affected-counties-over-time.json'"
+) TO './output/hurricane-katrina-affected-counties-over-time.json'"
 
 # Get windspeed data as GeoJSON
 psql -d gis_db -c "COPY (
@@ -54,7 +56,7 @@ psql -d gis_db -c "COPY (
                                r.sw,
                                r.nw
                     ) As l)) As properties
-            FROM public.al182012_radii as r
+            FROM public.al122005_radii as r
         ) f
     ) fc
-) TO './output/al182012_radii.json'"
+) TO './output/al122005_radii.json'"
