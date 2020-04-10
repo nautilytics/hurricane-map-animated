@@ -1,28 +1,13 @@
 #!/bin/bash
 
-createdb gis_db
-psql -d gis_db -c "CREATE EXTENSION postgis"
-
 # Go to input directory to retrieve necessary files
 cd input
-
-# Add US County data to Postgis w/ GIST index
-curl https://www2.census.gov/geo/tiger/TIGER2019/COUNTY/tl_2019_us_county.zip --output tl_2019_us_county.zip
-unzip tl_2019_us_county.zip
-shp2pgsql tl_2019_us_county/tl_2019_us_county.shp public.tl_2019_us_county | psql -d gis_db
-psql -d gis_db -c "CREATE INDEX tl_2019_us_county_geom_gix ON public.tl_2019_us_county USING GIST (geom)"
 
 # Add Hurricane Sandy Radii data to Postgis w/ GIST index
 curl https://www.nhc.noaa.gov/gis/best_track/al182012_best_track.zip --output al182012_best_track.zip
 unzip al182012_best_track.zip
 shp2pgsql al182012_best_track/al182012_radii.shp public.al182012_radii| psql -d gis_db
 psql -d gis_db -c "CREATE INDEX al182012_radii_geom_gix ON public.al182012_radii USING GIST (geom)"
-
-# Add Hurricane Sandy Windswath data to Postgis w/ GIST index
-curl https://www.nhc.noaa.gov/gis/best_track/al182012_best_track.zip --output al182012_best_track.zip
-unzip al182012_best_track.zip
-shp2pgsql al182012_best_track/al182012_windswath.shp public.al182012_windswath | psql -d gis_db
-psql -d gis_db -c "CREATE INDEX al182012_windswath_geom_gix ON public.al182012_windswath USING GIST (geom)"
 
 # Get affected counties with date and windspeed data as GeoJSON
 psql -d gis_db -c "COPY (
