@@ -1,5 +1,9 @@
 # Hurricane Analysis of Affected Counties
 
+### Demo
+
+http://nautilytics.hurricane-map-animated.s3-website-us-east-1.amazonaws.com/
+
 ![hurricane-sandy-over-time](https://user-images.githubusercontent.com/1707103/77975207-64989100-72c7-11ea-9aee-dedf41a13abc.gif)
 
 ## Introduction
