@@ -1,6 +1,6 @@
 import { initialState } from '../state/global';
 import { getData, getTopology, getWindSpeed } from '../api';
-import { IS_CLICKED } from '../../constant';
+import { IS_CLICKED, IS_SELECTED } from '../../constant';
 import { dateAccessor } from '../../utils';
 import { nest } from 'd3-collection';
 import { scaleQuantile } from 'd3-scale';
@@ -114,10 +114,13 @@ function toggleLoadingIcon(x) {
 }
 
 export function retrieveData() {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(toggleLoadingIcon(true));
 
-    Promise.all([getTopology(), getData(), getWindSpeed()])
+    // Get the currently selected hurricane
+    const selectedHurricane = getState().global.hurricanes.find(hurricane => hurricane[IS_SELECTED]);
+
+    Promise.all([getTopology(), getData(selectedHurricane), getWindSpeed(selectedHurricane)])
       .then(results => {
         const [topology, data, windSpeed] = results;
         dispatch({
