@@ -1,6 +1,6 @@
 import { initialState } from '../state/global';
 import { getData, getTopology, getWindSpeed } from '../api';
-import { IS_CLICKED } from '../../constant';
+import { IS_CLICKED, IS_SELECTED } from '../../constant';
 import { dateAccessor } from '../../utils';
 import { nest } from 'd3-collection';
 import { scaleQuantile } from 'd3-scale';
@@ -16,6 +16,7 @@ const UPDATE_DATA = 'UPDATE_DATA';
 const UPDATE_TOPOLOGY = 'UPDATE_TOPOLOGY';
 const SHOW_ERROR = 'SHOW_ERROR';
 const UPDATE_WIND_SPEED = 'UPDATE_WIND_SPEED';
+const UPDATE_HURRICANE = 'UPDATE_HURRICANE';
 
 const handleTooltip = (state, item) => {
   if (state.tooltip && state.tooltip[IS_CLICKED]) {
@@ -101,6 +102,16 @@ export default function reducer(state = initialState, action) {
         showError: false,
         isLoading: action.x,
       };
+    case UPDATE_HURRICANE:
+      return {
+        ...state,
+        hurricanes: state.hurricanes.map(hurricane => {
+          return {
+            ...hurricane,
+            [IS_SELECTED]: hurricane.id === action.id,
+          };
+        }),
+      };
     default:
       return state;
   }
@@ -113,11 +124,24 @@ function toggleLoadingIcon(x) {
   };
 }
 
-export function retrieveData() {
+export function updateHurricane(id) {
   return dispatch => {
+    dispatch({
+      type: UPDATE_HURRICANE,
+      id,
+    });
+    dispatch(retrieveData());
+  };
+}
+
+export function retrieveData() {
+  return (dispatch, getState) => {
     dispatch(toggleLoadingIcon(true));
 
-    Promise.all([getTopology(), getData(), getWindSpeed()])
+    // Get the currently selected hurricane
+    const selectedHurricane = getState().global.hurricanes.find(hurricane => hurricane[IS_SELECTED]);
+
+    Promise.all([getTopology(), getData(selectedHurricane), getWindSpeed(selectedHurricane)])
       .then(results => {
         const [topology, data, windSpeed] = results;
         dispatch({

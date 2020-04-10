@@ -2,26 +2,32 @@ import React, { useEffect, useCallback } from 'react';
 import Spinner from './Spinner';
 import Tooltip from './Tooltip';
 import { useDispatch, useSelector } from 'react-redux';
-import { retrieveData } from '../../redux/modules/global';
+import { retrieveData, updateHurricane } from '../../redux/modules/global';
 import Map from './Map';
 import Brush from './Brush';
+import MaterialSelect from './MaterialSelect';
 
 const App = () => {
   const dispatch = useDispatch();
-  const topology = useSelector(state => state.global.topology);
-  const data = useSelector(state => state.global.data);
-  const windSpeed = useSelector(state => state.global.windSpeed);
+  const isLoading = useSelector(state => state.global.isLoading);
+  const hurricanes = useSelector(state => state.global.hurricanes);
   const getData = useCallback(() => dispatch(retrieveData()), [dispatch]);
+  const updateSelectedHurricane = useCallback(id => dispatch(updateHurricane(id)), [dispatch]);
 
   useEffect(() => {
     getData();
   }, []);
 
+  const onChange = id => {
+    // When a user changes the selected hurricane, retrieve the new data set
+    updateSelectedHurricane(id);
+  };
+
   return (
     <div className="main">
       <Tooltip />
-      <h3>Hurricane Sandy</h3>
-      {topology && data && windSpeed ? (
+      <MaterialSelect items={hurricanes} label={'Select a hurricane'} handleChange={onChange} />
+      {!isLoading ? (
         <>
           <Map />
           <div className="footer">
