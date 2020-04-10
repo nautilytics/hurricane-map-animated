@@ -10,10 +10,13 @@ When a disaster strikes, many businesses rush to identify affected customers and
 
 - Install [Postgres](https://postgresapp.com/)
 - Install [Node](https://nodejs.org/en/)
-- Run `./public/data/init.sh` to download and process the shapefiles, run the PostGIS intersection query, and output the necessary GeoJSON files
+- Run `init` scripts
+  - Run `./public/data/init-db.sh` to create and set-up database with PostGIS
+  - Run `./public/data/init-counties.sh` to download and process the county shapefiles
+  - Run `./public/data/init-hurricane-sandy-2012.sh`, to download and process Hurricane Sandy files and run/output the PostGIS intersection query
+  - Run `./public/data/init-hurricane-katrina-2005.sh`, to download and process Hurricane Katrina files and run/output the PostGIS intersection query
 - Install application dependencies and run the application
-
-```bash
-yarn # install all dependencies
-yarn start # start the application
-```
+  ```bash
+  yarn # install all dependencies
+  yarn start # start the application
+  ```
