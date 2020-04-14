@@ -12,7 +12,7 @@ When a disaster strikes, many businesses rush to identify affected customers and
 
 ## Instructions for getting up and running
 
-- Install [Postgres](https://postgresapp.com/)
+- Install [Postgres](https://www.bostongis.com/?content_name=postgis_tut01#316)
 - Install [Node](https://nodejs.org/en/)
 - Run `init` scripts
   - Run `./public/data/init-db.sh` to create and set-up database with PostGIS
