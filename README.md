@@ -8,7 +8,7 @@ http://nautilytics.hurricane-map-animated.s3-website-us-east-1.amazonaws.com/
 
 ## Introduction
 
-When a disaster strikes, many businesses rush to identify affected customers and reduce or remove late fees, offer no-fee loans, or take other actions to help customers in a time of need. The relevance of such strategies has never been more relevant than in the age of COVID-19, which is unlike any disaster we've ever seen. As I was rushing to find data on affected customers in the hardest hit areas of the United States, it occurred to me that there must be a quick and easy way to do this within minutes for disasters such as hurricanes or tornados. In this age of rich and abundant data, we can practically ask and answer questions before, during, and after disaster strikes.
+When a disaster strikes, many businesses rush to identify affected customers and react. For example, some may offer no-fee loans, reduce or remove late fees, or take other actions to assist customers in a time of need. Identifying affected customers is essential for businesses. As I was looking for information on areas most hit by disasters like hurricanes, tornados or earthquake in the United States, it occurred to me that there must be an easy way to do this within minutes. In this age of rich and abundant data, we can practically ask and answer questions before, during, and after disasters strike.
 
 ## Instructions for getting up and running
 
