@@ -135,32 +135,50 @@ export function updateHurricane(id) {
 }
 
 export function retrieveData() {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch(toggleLoadingIcon(true));
 
     // Get the currently selected hurricane
     const selectedHurricane = getState().global.hurricanes.find(hurricane => hurricane[IS_SELECTED]);
 
-    Promise.all([getTopology(), getData(selectedHurricane), getWindSpeed(selectedHurricane)])
-      .then(results => {
-        const [topology, data, windSpeed] = results;
+    // Get the topology
+    const currentTopology = getState().global.topology;
+
+    if (!currentTopology) {
+      try {
+        const topology = await getTopology();
         dispatch({
           type: UPDATE_TOPOLOGY,
           topology,
         });
-        dispatch({
-          type: UPDATE_DATA,
-          data,
-        });
-        dispatch({
-          type: UPDATE_WIND_SPEED,
-          windSpeed,
-        });
-      })
-      .catch(err => {
+      } catch (err) {
         console.log(err);
         dispatch({ type: SHOW_ERROR });
-      })
-      .finally(() => dispatch(toggleLoadingIcon(false)));
+      }
+    }
+
+    try {
+      const data = await getData(selectedHurricane);
+      dispatch({
+        type: UPDATE_DATA,
+        data,
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({ type: SHOW_ERROR });
+    }
+
+    try {
+      const windSpeed = await getWindSpeed(selectedHurricane);
+      dispatch({
+        type: UPDATE_WIND_SPEED,
+        windSpeed,
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({ type: SHOW_ERROR });
+    }
+
+    dispatch(toggleLoadingIcon(false));
   };
 }
